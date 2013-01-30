@@ -230,6 +230,13 @@
         android:icon="@*android:drawable/ic_print"
         android:title="@string/print_settings" />
 
+    <!-- USB Host tmtmtm -->
+    <header
+        android:id="@+id/usbhost_settings"
+        android:fragment="com.android.settings.cyanogenmod.UsbHostSettings"
+        android:icon="@drawable/ic_settings_usbhost"
+        android:title="@string/usbhost_settings_title" />
+
     <!-- Development -->
     <header
         android:id="@+id/development_settings"

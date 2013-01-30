@@ -3130,6 +3130,23 @@
     <!-- Summary for built-in keyboard settings -->
     <string name="builtin_keyboard_settings_summary">Physical keyboard settings</string>
 
+
+    <!-- UsbHost Settings. tmtmtm -->
+    <string name="usbhost_settings_title">USB Host</string>
+
+    <!-- Fixed Installation. -->
+    <string name="fixed_installation_title">Fixed installation Mode</string>
+    <string name="fixed_installation_summary">FI-Mode allows for reliable USB Host wake/sleep behavior. FI-mode disables OTG-mode. In FI-mode, USB slave devices will not be powered by the host device.</string>
+
+    <!-- hotplug_on_boot. -->
+    <string name="hotplug_on_boot_title">Hot-Plug audio with booted DAC</string>
+    <string name="hotplug_on_boot_summary">Allow hot-plug functionality when host was booted with USB DAC connected.</string>
+
+    <!-- Fixed Installation. -->
+    <string name="fastcharge_in_host_mode_title">Fast charging while in USB host mode</string>
+    <string name="fastcharge_in_host_mode_summary">Allow host to draw more than 500mA when OTG charging adapter is connected.</string>
+
+
     <!-- Development Settings.  the title for the item to take the user to Development settings.  Development settings are settings meant for application developers.  -->
     <string name="development_settings_title">Developer options</string>
     <!-- Development Settings summary.  The summary of the item to take the user to Development settings.  Development settings are settings meant for application developers. -->

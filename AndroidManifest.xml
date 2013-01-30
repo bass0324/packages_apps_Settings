@@ -1726,6 +1726,11 @@
 
         <activity android:name=".ApnEditor" />
 
+        <!-- tmtmtm -->
+        <activity android:name=".cyanogenmod.UsbHostSettings" />
+
+        <activity android:name=".cyanogenmod.PerformanceSettings" />
+
          <!-- "Blacklist settings" UI, used only on voice-capable phone devices. -->
         <activity android:name="Settings$BlacklistSettingsActivity"
                 android:theme="@android:style/Theme.Holo.DialogWhenLarge"

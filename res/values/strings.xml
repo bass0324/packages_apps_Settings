@@ -3131,20 +3131,25 @@
     <string name="builtin_keyboard_settings_summary">Physical keyboard settings</string>
 
 
-    <!-- UsbHost Settings. tmtmtm -->
+    <!-- tmtmtm -->
+    <!-- UsbHost Settings -->
     <string name="usbhost_settings_title">USB Host</string>
 
-    <!-- Fixed Installation. -->
-    <string name="fixed_installation_title">Fixed installation Mode</string>
-    <string name="fixed_installation_summary">FI-Mode allows for reliable USB Host wake/sleep behavior. FI-mode disables OTG-mode. In FI-mode, USB slave devices will not be powered by the host device.</string>
+    <!-- Fixed Installation -->
+    <string name="fixed_installation_title">Fixed installation mode</string>
+    <string name="fixed_installation_summary">Allow for reliable USB Host wake/sleep behavior. In FI-mode, USB slave devices will not be powered by the host. Disable FI-mode for pure OTG-mode.</string> 
 
-    <!-- hotplug_on_boot. -->
-    <string name="hotplug_on_boot_title">Hot-Plug audio with booted DAC</string>
-    <string name="hotplug_on_boot_summary">Allow hot-plug functionality when host was booted with USB DAC connected.</string>
-
-    <!-- Fixed Installation. -->
+    <!-- Fast charging in host mode -->
     <string name="fastcharge_in_host_mode_title">Fast charging while in USB host mode</string>
-    <string name="fastcharge_in_host_mode_summary">Allow host to draw more than 500mA when OTG charging adapter is connected.</string>
+    <string name="fastcharge_in_host_mode_summary">Allow host to draw up to 1800mA when an OTG charging adapter is in use.</string>
+
+    <!-- hotplug_wired_accessory -->
+    <string name="hotplug_wired_accessory_title">Hot-Plug wired audio devices</string>
+    <string name="hotplug_wired_accessory_summary">Allow USB DAC\'s to become hot pluggable.</string>
+
+    <!-- hotplug_on_boot -->
+    <string name="hotplug_on_boot_title">Hot-Plug wired audio boot devices</string>
+    <string name="hotplug_on_boot_summary">Allow USB DAC\'s to become hot pluggable, when connected at boot time.</string>
 
 
     <!-- Development Settings.  the title for the item to take the user to Development settings.  Development settings are settings meant for application developers.  -->

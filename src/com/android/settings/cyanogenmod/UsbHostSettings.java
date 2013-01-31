@@ -37,17 +37,20 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceChangeListener {
     private static final String TAG = "UsbHostSettings";
 
-    public static final String FI_MODE_FILE = "/sys/kernel/usbhost/fixed_install_mode";
+    public static final String FI_MODE_FILE = "/sys/kernel/usbhost/usbhost_fixed_install_mode";
     private static final String FI_MODE_PREF = "fixed_installation";   // from res/values/strings.xml
     private CheckBoxPreference mFiModePref;
 
-    public static final String HP_ON_BOOT_FILE = "/sys/kernel/usbhost/hotplug_on_boot";
-    private static final String HP_ON_BOOT_PREF = "hotplug_on_boot";   // from res/values/strings.xml
-    private CheckBoxPreference mHpOnBootPref;
-
-    public static final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/fastcharge_in_host_mode";
+    public static final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/usbhost_fastcharge_in_host_mode";
     private static final String FASTCHARGE_IN_HOSTMODE_PREF = "fastcharge_in_host_mode";   // from res/values/strings.xml
     private CheckBoxPreference mFastChargeInHostModePref;
+
+    private static final String HP_WIRED_ACCESSORY_PREF = "hotplug_wired_accessory";   // from res/values/strings.xml
+    private CheckBoxPreference mHpWiredAccessoryPref;
+
+    public static final String HP_ON_BOOT_FILE = "/sys/kernel/usbhost/usbhost_hotplug_on_boot";
+    private static final String HP_ON_BOOT_PREF = "hotplug_on_boot";   // from res/values/strings.xml
+    private CheckBoxPreference mHpOnBootPref;
 
 
 /*
@@ -74,31 +77,28 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         addPreferencesFromResource(R.xml.usbhost_settings);
 
         PreferenceScreen prefSet = getPreferenceScreen();
-
+        mFiModePref = (CheckBoxPreference) prefSet.findPreference(FI_MODE_PREF);
+        mFastChargeInHostModePref = (CheckBoxPreference) prefSet.findPreference(FASTCHARGE_IN_HOSTMODE_PREF);
+        mHpWiredAccessoryPref = (CheckBoxPreference) prefSet.findPreference(HP_WIRED_ACCESSORY_PREF);
+        mHpOnBootPref = (CheckBoxPreference) prefSet.findPreference(HP_ON_BOOT_PREF);
         String temp;
-        if((temp = Utils.fileReadOneLine(FI_MODE_FILE)) == null) {
-            // failed to read value
-        } else {
-            mFiModePref = (CheckBoxPreference) prefSet.findPreference(FI_MODE_PREF);
+
+        if((temp = Utils.fileReadOneLine(FI_MODE_FILE)) != null) {
             mFiModePref.setChecked("1".equals(temp));
         }
-        mFiModePref.setEnabled(false);
+        //mFiModePref.setEnabled(false);
 
-        if((temp = Utils.fileReadOneLine(HP_ON_BOOT_FILE)) == null) {
-            // failed to read value
-        } else {
-            mHpOnBootPref = (CheckBoxPreference) prefSet.findPreference(HP_ON_BOOT_PREF);
+        if((temp = Utils.fileReadOneLine(FASTCHARGE_IN_HOSTMODE_FILE)) != null) {
+            mFastChargeInHostModePref.setChecked("1".equals(temp));
+        }
+        //mFastChargeInHostModePref.setEnabled(false);
+
+        mHpWiredAccessoryPref.setEnabled(false);
+
+        if((temp = Utils.fileReadOneLine(HP_ON_BOOT_FILE)) != null) {
             mHpOnBootPref.setChecked("1".equals(temp));
         }
         mHpOnBootPref.setEnabled(false);
-
-        if((temp = Utils.fileReadOneLine(FASTCHARGE_IN_HOSTMODE_FILE)) == null) {
-            // failed to read value
-        } else {
-            mFastChargeInHostModePref = (CheckBoxPreference) prefSet.findPreference(FASTCHARGE_IN_HOSTMODE_PREF);
-            mFastChargeInHostModePref.setChecked("1".equals(temp));
-        }
-        mFastChargeInHostModePref.setEnabled(false);
 
 /*
         if (!Utils.fileExists(FREQ_CUR_FILE)) {
@@ -163,17 +163,27 @@ public class UsbHostSettings extends SettingsPreferenceFragment
             }
             Log.i(TAG, "onPreferenceTreeClick failed");
 
-        } else if(preference == mHpOnBootPref) {
+        } else if(preference == mFastChargeInHostModePref) {
+            Log.i(TAG, "onPreferenceTreeClick mFastChargeInHostModePref checked="+mFastChargeInHostModePref.isChecked());
+            if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, mFastChargeInHostModePref.isChecked() ? "1" : "0")) {
+                Log.i(TAG, "onPreferenceTreeClick value changed");
+                return true;
+            }
+            Log.i(TAG, "onPreferenceTreeClick failed");
+
+
+        } else if(preference == mHpWiredAccessoryPref) {
+/* TODO: need to store mHpWiredAccessoryPref state in standard preferences
             Log.i(TAG, "onPreferenceTreeClick mHpOnBootPref checked="+mHpOnBootPref.isChecked());
             if (Utils.fileWriteOneLine(HP_ON_BOOT_FILE, mHpOnBootPref.isChecked() ? "1" : "0")) {
                 Log.i(TAG, "onPreferenceTreeClick value changed");
                 return true;
             }
             Log.i(TAG, "onPreferenceTreeClick failed");
-
-        } else if(preference == mFastChargeInHostModePref) {
-            Log.i(TAG, "onPreferenceTreeClick mFastChargeInHostModePref checked="+mFastChargeInHostModePref.isChecked());
-            if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, mFastChargeInHostModePref.isChecked() ? "1" : "0")) {
+*/
+        } else if(preference == mHpOnBootPref) {
+            Log.i(TAG, "onPreferenceTreeClick mHpOnBootPref checked="+mHpOnBootPref.isChecked());
+            if (Utils.fileWriteOneLine(HP_ON_BOOT_FILE, mHpOnBootPref.isChecked() ? "1" : "0")) {
                 Log.i(TAG, "onPreferenceTreeClick value changed");
                 return true;
             }

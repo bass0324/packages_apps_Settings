@@ -40,7 +40,6 @@
         android:title="@string/hotplug_on_boot_title"
         android:summary="@string/hotplug_on_boot_summary" />
 
-
 <!--
     <PreferenceScreen
         android:key="processor"

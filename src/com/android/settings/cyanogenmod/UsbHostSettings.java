@@ -37,23 +37,26 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceChangeListener {
     private static final String TAG = "UsbHostSettings";
 
-    public static final String FI_MODE_FILE = "/sys/kernel/usbhost/usbhost_fixed_install_mode";
+    private static final String HOST_MODE_FILE = "/sys/kernel/usbhost/usbhost_hostmode";
+
+    private static final String FI_MODE_FILE = "/sys/kernel/usbhost/usbhost_fixed_install_mode";
     private static final String FI_MODE_PREF = "fixed_installation";   // from res/values/strings.xml
     private CheckBoxPreference mFiModePref;
 
-    public static final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/usbhost_fastcharge_in_host_mode";
+    private static final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/usbhost_fastcharge_in_host_mode";
     private static final String FASTCHARGE_IN_HOSTMODE_PREF = "fastcharge_in_host_mode";   // from res/values/strings.xml
     private CheckBoxPreference mFastChargeInHostModePref;
+	private static final String USE_FASTCHARGE_IN_HOSTMODE_PROP = "persist.sys.use_fcharge_host";
+    private static final String USE_FASTCHARGE_IN_HOSTMODE_DEFAULT = "0";
 
     private static final String HP_WIRED_ACCESSORY_PREF = "hotplug_wired_accessory";   // from res/values/strings.xml
     private CheckBoxPreference mHpWiredAccessoryPref;
     private static final String USE_HP_WIRED_ACCESSORY_PERSIST_PROP = "persist.sys.use_wired_accessory";
     private static final String USE_HP_WIRED_ACCESSORY_DEFAULT = "1";
 
-    public static final String HP_ON_BOOT_FILE = "/sys/kernel/usbhost/usbhost_hotplug_on_boot";
+    private static final String HP_ON_BOOT_FILE = "/sys/kernel/usbhost/usbhost_hotplug_on_boot";
     private static final String HP_ON_BOOT_PREF = "hotplug_on_boot";   // from res/values/strings.xml
     private CheckBoxPreference mHpOnBootPref;
-
 
 /*
     private static final String USE_DITHERING_PREF = "pref_use_dithering";
@@ -85,28 +88,33 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         mHpOnBootPref = (CheckBoxPreference) prefSet.findPreference(HP_ON_BOOT_PREF);
         String temp;
 
-        if((temp = Utils.fileReadOneLine(FI_MODE_FILE)) != null) {
+		int curHostMode = 0;
+        if((temp = Utils.fileReadOneLine(HOST_MODE_FILE)) != null) {
+            if("1".equals(temp))
+            	curHostMode=1;
+        }
+
+		if(curHostMode>0) {
+			// FI checkbox disabled while device in USB host mode
+	        mFiModePref.setEnabled(false);
+	    } else if((temp = Utils.fileReadOneLine(FI_MODE_FILE)) != null) {
             mFiModePref.setChecked("1".equals(temp));
         }
-        mFiModePref.setEnabled(false);
 
-        if((temp = Utils.fileReadOneLine(FASTCHARGE_IN_HOSTMODE_FILE)) != null) {
-            mFastChargeInHostModePref.setChecked("1".equals(temp));
-        }
-        //mFastChargeInHostModePref.setEnabled(false);
-
-        //mHpWiredAccessoryPref.setEnabled(false);
-
-        //mHpOnBootPref.setEnabled(false);
+		// hotplug-on-boot is default on in the kernel + it's checkbox is disabled 
+        mHpOnBootPref.setEnabled(false);
         if((temp = Utils.fileReadOneLine(HP_ON_BOOT_FILE)) != null) {
             mHpOnBootPref.setChecked("1".equals(temp));
         }
 
         if (getPreferenceManager() != null) {
 
+			// hotplug is default on + it's checkbox is disabled
             String useHpWiredAccessory = SystemProperties.get(USE_HP_WIRED_ACCESSORY_PERSIST_PROP,
                                                               USE_HP_WIRED_ACCESSORY_DEFAULT);
+            useHpWiredAccessory = "1";
             mHpWiredAccessoryPref.setChecked("1".equals(useHpWiredAccessory));
+	        mHpWiredAccessoryPref.setEnabled(false);
 
 /*
             String useDithering = SystemProperties.get(USE_DITHERING_PERSIST_PROP, USE_DITHERING_DEFAULT);
@@ -119,6 +127,10 @@ public class UsbHostSettings extends SettingsPreferenceFragment
             String use16bppAlpha = SystemProperties.get(USE_16BPP_ALPHA_PROP, "0");
             mUse16bppAlphaPref.setChecked("1".equals(use16bppAlpha));
 */
+
+			String useFastChargeInHostMode = SystemProperties.get(USE_FASTCHARGE_IN_HOSTMODE_PROP,
+			                                                      USE_FASTCHARGE_IN_HOSTMODE_DEFAULT);
+			mFastChargeInHostModePref.setChecked("1".equals(useFastChargeInHostMode));
 
             /* Display the warning dialog */
 /*
@@ -147,6 +159,19 @@ public class UsbHostSettings extends SettingsPreferenceFragment
 
         if(preference == mFiModePref) {
             Log.i(TAG, "onPreferenceTreeClick mFiModePref checked="+mFiModePref.isChecked());
+
+		    String temp;
+			int curHostMode = 0;
+		    if((temp = Utils.fileReadOneLine(HOST_MODE_FILE)) != null) {
+		        if("1".equals(temp))
+		        	curHostMode=1;
+		    }
+
+			if(curHostMode>0) {
+				// not allowed to change value when in host mode
+			    mFiModePref.setEnabled(false);
+			    mFiModePref.setChecked(!mFiModePref.isChecked()); // undo
+			} else
             if (Utils.fileWriteOneLine(FI_MODE_FILE, mFiModePref.isChecked() ? "1" : "0")) {
                 Log.i(TAG, "onPreferenceTreeClick value changed");
                 return true;
@@ -157,8 +182,11 @@ public class UsbHostSettings extends SettingsPreferenceFragment
             Log.i(TAG, "onPreferenceTreeClick mFastChargeInHostModePref checked="+mFastChargeInHostModePref.isChecked());
             if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, mFastChargeInHostModePref.isChecked() ? "1" : "0")) {
                 Log.i(TAG, "onPreferenceTreeClick value changed");
+	            SystemProperties.set(USE_FASTCHARGE_IN_HOSTMODE_PROP,
+	                    mFastChargeInHostModePref.isChecked() ? "1" : "0");
                 return true;
             }
+		    mFastChargeInHostModePref.setChecked(!mFastChargeInHostModePref.isChecked()); // undo
             Log.i(TAG, "onPreferenceTreeClick failed");
 
         } else if(preference == mHpWiredAccessoryPref) {

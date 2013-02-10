@@ -3135,12 +3135,18 @@
     <!-- UsbHost Settings -->
     <string name="usbhost_settings_title">USB Host</string>
 
+    <string name="usb_host_category">USB Host</string>
+    <string name="usb_audio_category">USB Audio</string>
+    <string name="usb_info_category">USB Information</string>
+    <string name="usb_system_category">System</string>
+    <string name="usb_authors_category">Authors</string>
+
     <!-- Fixed Installation -->
     <string name="fixed_installation_title">Fixed installation mode</string>
     <string name="fixed_installation_summary">Allows for reliable USB Host deep sleep + wake-on-power behavior. USB slave devices will not be battery powered in FI-mode.\n\nDisable FI-mode for pure OTG.</string> 
 
     <!-- Fast charging in host mode -->
-    <string name="fastcharge_in_host_mode_title">Fast charging while in USB host mode</string>
+    <string name="fastcharge_in_host_mode_title">Fast charging USB host</string>
     <string name="fastcharge_in_host_mode_summary">Draws up to 1800mA when using an OTG Y-cable charging adapter. USE WITH CAUTION!! Fast charging may damage your battery. Use only with an appropriate power supply.\n\nDo not fast charge from a PC USB port!</string>
 
     <!-- hotplug_wired_accessory -->

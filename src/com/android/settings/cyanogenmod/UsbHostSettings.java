@@ -42,6 +42,8 @@ public class UsbHostSettings extends SettingsPreferenceFragment
     private static final String FI_MODE_FILE = "/sys/kernel/usbhost/usbhost_fixed_install_mode";
     private static final String FI_MODE_PREF = "fixed_installation";   // from res/values/strings.xml
     private CheckBoxPreference mFiModePref;
+	private static final String USE_FI_MODE_PROP = "persist.sys.use_fi_mode";
+    private static final String USE_FI_MODE_DEFAULT = "1";
 
     private static final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/usbhost_fastcharge_in_host_mode";
     private static final String FASTCHARGE_IN_HOSTMODE_PREF = "fastcharge_in_host_mode";   // from res/values/strings.xml
@@ -101,7 +103,7 @@ public class UsbHostSettings extends SettingsPreferenceFragment
             mFiModePref.setChecked("1".equals(temp));
         }
 
-		// hotplug-on-boot is default on in the kernel + it's checkbox is disabled 
+		// hotplug-on-boot is default on in the kernel; make checkbox inaccessible
         mHpOnBootPref.setEnabled(false);
         if((temp = Utils.fileReadOneLine(HP_ON_BOOT_FILE)) != null) {
             mHpOnBootPref.setChecked("1".equals(temp));
@@ -173,10 +175,11 @@ public class UsbHostSettings extends SettingsPreferenceFragment
 			    mFiModePref.setChecked(!mFiModePref.isChecked()); // undo
 			} else
             if (Utils.fileWriteOneLine(FI_MODE_FILE, mFiModePref.isChecked() ? "1" : "0")) {
-                Log.i(TAG, "onPreferenceTreeClick value changed");
+	            SystemProperties.set(USE_FI_MODE_PROP, mFiModePref.isChecked() ? "1" : "0");
+                Log.i(TAG, "onPreferenceTreeClick mFiModePref value changed");
                 return true;
             }
-            Log.i(TAG, "onPreferenceTreeClick failed");
+            Log.i(TAG, "onPreferenceTreeClick mFiModePref failed");
 
         } else if(preference == mFastChargeInHostModePref) {
             Log.i(TAG, "onPreferenceTreeClick mFastChargeInHostModePref checked="+mFastChargeInHostModePref.isChecked());

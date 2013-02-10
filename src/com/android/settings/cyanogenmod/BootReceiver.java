@@ -65,7 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
             }
         }
 
-		setFastCharge(ctx);
+		usbRomSettings(ctx);
     }
 
     private void configureCPU(Context ctx) {
@@ -144,26 +144,37 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
 	// tmtmtm
-    private void setFastCharge(Context ctx) {
+    private void usbRomSettings(Context ctx) {
 		final String USE_FASTCHARGE_IN_HOSTMODE_PROP = "persist.sys.use_fcharge_host";
 		final String USE_FASTCHARGE_IN_HOSTMODE_DEFAULT = "0";
 		final String FASTCHARGE_IN_HOSTMODE_FILE = "/sys/kernel/usbhost/usbhost_fastcharge_in_host_mode";
-
 		String useFastChargeInHostMode = SystemProperties.get(USE_FASTCHARGE_IN_HOSTMODE_PROP,
 			                                                  USE_FASTCHARGE_IN_HOSTMODE_DEFAULT);
-        Log.i(TAG, "useFastChargeInHostMode="+useFastChargeInHostMode);
+        Log.i(TAG, "usbRomSettings useFastChargeInHostMode="+useFastChargeInHostMode);
 		if("1".equals(useFastChargeInHostMode)) {
 			if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, "0")) {
 				if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, "1")) {
-			        Log.i(TAG, "useFastChargeInHostMode toggled off/on");
+			        Log.i(TAG, "usbRomSettings useFastChargeInHostMode toggled off/on");
 			    }
 			}
 		} else if("0".equals(useFastChargeInHostMode)) {
 			if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, "1")) {
 				if (Utils.fileWriteOneLine(FASTCHARGE_IN_HOSTMODE_FILE, "0")) {
-			        Log.i(TAG, "useFastChargeInHostMode toggled on/off");
+			        Log.i(TAG, "usbRomSettings useFastChargeInHostMode toggled on/off");
 			    }
 			}
 		}
-    }
+ 
+		final String USE_FI_MODE_PROP = "persist.sys.use_fi_mode";
+		final String USE_FI_MODE_DEFAULT = "1";
+	    final String FI_MODE_FILE = "/sys/kernel/usbhost/usbhost_fixed_install_mode";
+		String useFiMode = SystemProperties.get(USE_FI_MODE_PROP, USE_FI_MODE_DEFAULT);
+		Log.i(TAG, "usbRomSettings useFiMode="+useFiMode);
+		// useFiMode=1 is boot default, see: arch/arm/mach-tegra/usbhost.c
+		if("0".equals(useFiMode)) {
+            if (Utils.fileWriteOneLine(FI_MODE_FILE, "0")) {
+		        Log.i(TAG, "usbRomSettings useFiMode switched from FI to OTG mode");
+			}
+		}
+   }
 }

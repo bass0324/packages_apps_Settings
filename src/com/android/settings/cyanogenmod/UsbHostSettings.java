@@ -93,6 +93,7 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         }
         //mFastChargeInHostModePref.setEnabled(false);
 
+	mHpWiredAccessoryPref.setEnabled(false);
 
         if((temp = Utils.fileReadOneLine(HP_ON_BOOT_FILE)) != null) {
             mHpOnBootPref.setChecked("1".equals(temp));

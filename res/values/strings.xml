@@ -3143,10 +3143,6 @@
     <string name="fastcharge_in_host_mode_title">Fast charging while in USB host mode</string>
     <string name="fastcharge_in_host_mode_summary">Allow host to draw up to 1800mA when an OTG charging adapter is in use.</string>
 
-    <!-- hotplug_wired_accessory -->
-    <string name="hotplug_wired_accessory_title">Hot-Plug wired audio devices</string>
-    <string name="hotplug_wired_accessory_summary">Allow USB DAC\'s to become hot pluggable.</string>
-
     <!-- hotplug_on_boot -->
     <string name="hotplug_on_boot_title">Hot-Plug wired audio boot devices</string>
     <string name="hotplug_on_boot_summary">Allow USB DAC\'s to become hot pluggable, when connected at boot time.</string>

@@ -621,7 +621,7 @@ public class Utils {
                 br.close();
             }
         } catch (Exception e) {
-            Log.e(TAG, "IO Exception when reading /sys/ file", e);
+            //Log.e(TAG, "IO Exception when reading /sys/ file", e);
         }
         return line;
     }
@@ -636,7 +636,7 @@ public class Utils {
             }
         } catch (IOException e) {
             String Error = "Error writing to " + fname + ". Exception: ";
-            Log.e(TAG, Error, e);
+            //Log.e(TAG, Error, e);
             return false;
         }
         return true;

@@ -45,6 +45,9 @@ public class UsbHostSettings extends SettingsPreferenceFragment
     private static final String FASTCHARGE_IN_HOSTMODE_PREF = "fastcharge_in_host_mode";   // from res/values/strings.xml
     private CheckBoxPreference mFastChargeInHostModePref;
 
+    private static final String HP_WIRED_ACCESSORY_PREF = "hotplug_wired_accessory";   // from res/values/strings.xml
+    private CheckBoxPreference mHpWiredAccessoryPref;
+
     public static final String HP_ON_BOOT_FILE = "/sys/kernel/usbhost/usbhost_hotplug_on_boot";
     private static final String HP_ON_BOOT_PREF = "hotplug_on_boot";   // from res/values/strings.xml
     private CheckBoxPreference mHpOnBootPref;
@@ -76,6 +79,7 @@ public class UsbHostSettings extends SettingsPreferenceFragment
         PreferenceScreen prefSet = getPreferenceScreen();
         mFiModePref = (CheckBoxPreference) prefSet.findPreference(FI_MODE_PREF);
         mFastChargeInHostModePref = (CheckBoxPreference) prefSet.findPreference(FASTCHARGE_IN_HOSTMODE_PREF);
+        mHpWiredAccessoryPref = (CheckBoxPreference) prefSet.findPreference(HP_WIRED_ACCESSORY_PREF);
         mHpOnBootPref = (CheckBoxPreference) prefSet.findPreference(HP_ON_BOOT_PREF);
         String temp;
 
@@ -167,6 +171,15 @@ public class UsbHostSettings extends SettingsPreferenceFragment
             Log.i(TAG, "onPreferenceTreeClick failed");
 
 
+        } else if(preference == mHpWiredAccessoryPref) {
+/* TODO: need to store mHpWiredAccessoryPref state in standard preferences
+            Log.i(TAG, "onPreferenceTreeClick mHpOnBootPref checked="+mHpOnBootPref.isChecked());
+            if (Utils.fileWriteOneLine(HP_ON_BOOT_FILE, mHpOnBootPref.isChecked() ? "1" : "0")) {
+                Log.i(TAG, "onPreferenceTreeClick value changed");
+                return true;
+            }
+            Log.i(TAG, "onPreferenceTreeClick failed");
+*/
         } else if(preference == mHpOnBootPref) {
             Log.i(TAG, "onPreferenceTreeClick mHpOnBootPref checked="+mHpOnBootPref.isChecked());
             if (Utils.fileWriteOneLine(HP_ON_BOOT_FILE, mHpOnBootPref.isChecked() ? "1" : "0")) {

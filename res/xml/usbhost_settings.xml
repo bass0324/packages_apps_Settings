@@ -31,6 +31,11 @@
         android:summary="@string/fastcharge_in_host_mode_summary" />
 
     <CheckBoxPreference
+        android:key="hotplug_wired_accessory"
+        android:title="@string/hotplug_wired_accessory_title"
+        android:summary="@string/hotplug_wired_accessory_summary" />
+
+    <CheckBoxPreference
         android:key="hotplug_on_boot"
         android:title="@string/hotplug_on_boot_title"
         android:summary="@string/hotplug_on_boot_summary" />
